@@ -18,6 +18,9 @@ jobs:
       with:
         node-version: 16
 
+    - name: Update npm 
+      run: npm install -g npm@latest
+      
     - name: Install dependencies
       env:
         PYTHON: /usr/bin/python2.7
