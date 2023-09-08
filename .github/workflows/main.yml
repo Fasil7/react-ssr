@@ -19,7 +19,9 @@ jobs:
         node-version: 16
 
     - name: Install dependencies
-      run: npm install --python=python2.7
+      env:
+        PYTHON: /usr/bin/python2.7
+      run: npm install
 
     - name: Build the application
       run: npm run build
