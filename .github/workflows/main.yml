@@ -18,9 +18,12 @@ jobs:
       with:
         node-version: 16
 
-    - name: Install npm 10.0.0
+    - name: Set npm version
+      run: echo "NPM_VERSION=$(npm -v)" >> $GITHUB-ENV
+
+    - name: Install npm 
       run: |
-       npm install -g npm@10.0.0
+       echo "using npm version $NPM_VERSION"
       
     - name: Install dependencies
       env:
