@@ -16,7 +16,7 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 16
+        node-version: 16.0.0
 
     - name: Set npm version
       run: echo "NPM_VERSION=$(npm -v)" >> $GITHUB-ENV
@@ -26,8 +26,6 @@ jobs:
        echo "using npm version $NPM_VERSION"
       
     - name: Install dependencies
-      env:
-        PYTHON: /usr/bin/python2.7
       run: npm install
 
     - name: Build the application
