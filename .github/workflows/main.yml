@@ -19,7 +19,12 @@ jobs:
         node-version: 16
 
     - name: Install dependencies
-      run: npm install -g npm
+      run: npm install 
+
+    - name: Configure AWS credentials
+      run: |
+        echo ${{ secrets.AWS_ACCESS_KEY_ID}} > ~/.aws/credentials
+        echo ${{ secrets.AWS_SECRET_KEY}} > ~/.aws/credentials
 
     - name: Build the application
       run: npm run build
