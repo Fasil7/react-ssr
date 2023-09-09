@@ -13,48 +13,43 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_RUNNER: true
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-steps:
-  # Reference a specific commit
-  - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
-  # Reference the major version of a release
-  - uses: actions/checkout@v3
-  # Reference a specific version
-  - uses: actions/checkout@v3.2.0
-  # Reference a branch
-  - uses: actions/checkout@main
+  
+    steps:
+       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+       - uses: actions/checkout@v3
+       - uses: actions/checkout@v3.2.0
+       - uses: actions/checkout@main
 
+       - name: Set npm version
+         run: |
+          echo "NPM_VERSION=$(npm -v)" >> $GITHUB_ENV
+          echo "python=/usr/bin/python2.7" >> $GITHUB_ENV
 
+       - name: updation
+         run: |
+          sudo apt-get update
+          sudo apt-get install -y python2.7
 
-    - name: Set npm version
-      run: |
-       echo "NPM_VERSION=$(npm -v)" >> $GITHUB_ENV
-       echo "python=/usr/bin/python2.7" >> $GITHUB_ENV
+       - name: npm config
+         run: npm config set python /usr/bin/python2.7
 
-    - name: updation
-      run: |
-       sudo apt-get update
-       sudo apt-get install -y python2.7
+       - name: Install npm
+         run: |
+          echo "using npm version $NPM_VERSION"
 
-    - name: npm config
-      run: npm config set python /usr/bin/python2.7
+       - name: Install dependencies
+         run: npm install
 
-    - name: Install npm
-      run: |
-       echo "using npm version $NPM_VERSION"
+       - name: Build the application
+         run: npm run build
 
-    - name: Install dependencies
-      run: npm install
+       - name: Configure AWS credentials
+         run: |
+          echo "[default]" > ~/.aws/credentials
+          echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+          echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
 
-    - name: Build the application
-      run: npm run build
-
-    - name: Configure AWS credentials
-      run: |
-        echo "[default]" > ~/.aws/credentials
-        echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-        echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-
-    - name: Deploy to AWS
-      run: |
-       aws s3 cp build/ s3://forkbucket/ --recursive
+       - name: Deploy to AWS
+         run: |
+          aws s3 cp build/ s3://forkbucket/ --recursive
 
