@@ -29,7 +29,7 @@ jobs:
        sudo apt-get install -y python2.7
 
     - name: npm config
-      run: npm caonfig set python /usr/bin/python2.7
+      run: npm config set python /usr/bin/python2.7
 
     - name: Install npm
       run: |
